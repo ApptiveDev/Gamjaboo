@@ -1,4 +1,4 @@
-package com.example.gamjaboo.budgetapp.entitiy;
+package com.example.gamjaboo.budgetapp.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

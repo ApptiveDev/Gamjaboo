@@ -1,7 +1,7 @@
 package com.example.gamjaboo.budgetapp.service;
 
 import com.example.gamjaboo.budgetapp.dto.BudgetRequestDto;
-import com.example.gamjaboo.budgetapp.entitiy.DailyBudget;
+import com.example.gamjaboo.budgetapp.entity.DailyBudget;
 import com.example.gamjaboo.budgetapp.repository.DailyBudgetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.example.gamjaboo.budgetapp.controller;
 
-import com.example.gamjaboo.budgetapp.common.ApiResponse;
+import com.example.gamjaboo.common.ApiResponse;
 import com.example.gamjaboo.budgetapp.dto.BudgetRequestDto;
 import com.example.gamjaboo.budgetapp.service.DailyBudgetService;
 import lombok.RequiredArgsConstructor;

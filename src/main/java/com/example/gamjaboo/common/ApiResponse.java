@@ -1,4 +1,4 @@
-package com.example.gamjaboo.budgetapp.common;
+package com.example.gamjaboo.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
