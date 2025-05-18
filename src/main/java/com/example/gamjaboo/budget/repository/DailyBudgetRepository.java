@@ -1,6 +1,6 @@
-package com.example.gamjaboo.budgetapp.repository;
+package com.example.gamjaboo.budget.repository;
 
-import com.example.gamjaboo.budgetapp.entity.DailyBudget;
+import com.example.gamjaboo.budget.entity.DailyBudget;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

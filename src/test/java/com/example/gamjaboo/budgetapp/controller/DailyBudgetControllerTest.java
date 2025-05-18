@@ -1,7 +1,8 @@
 package com.example.gamjaboo.budgetapp.controller;
 
-import com.example.gamjaboo.budgetapp.dto.BudgetRequestDto;
-import com.example.gamjaboo.budgetapp.service.DailyBudgetService;
+import com.example.gamjaboo.budget.controller.DailyBudgetController;
+import com.example.gamjaboo.budget.dto.BudgetRequestDto;
+import com.example.gamjaboo.budget.service.DailyBudgetService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

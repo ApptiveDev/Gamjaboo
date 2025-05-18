@@ -1,4 +1,4 @@
-package com.example.gamjaboo.budgetapp.dto;
+package com.example.gamjaboo.budget.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

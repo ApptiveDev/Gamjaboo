@@ -1,8 +1,8 @@
-package com.example.gamjaboo.budgetapp.controller;
+package com.example.gamjaboo.budget.controller;
 
 import com.example.gamjaboo.common.ApiResponse;
-import com.example.gamjaboo.budgetapp.dto.BudgetRequestDto;
-import com.example.gamjaboo.budgetapp.service.DailyBudgetService;
+import com.example.gamjaboo.budget.dto.BudgetRequestDto;
+import com.example.gamjaboo.budget.service.DailyBudgetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
