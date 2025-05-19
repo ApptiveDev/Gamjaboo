@@ -63,5 +63,16 @@ public class TransactionService {
 
         transactionRepository.deleteById(id);
     }
+
+    public Integer updateTransaction(Long id, TransactionRequestDto dto) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 거래 내역이 존재하지 않습니다."));
+
+        transaction.updateFrom(dto);
+
+        Transaction saved = transactionRepository.save(transaction);
+
+        return saved.getTransactionId();
+    }
 }
 
