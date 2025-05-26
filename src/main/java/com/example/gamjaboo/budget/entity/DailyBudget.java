@@ -19,5 +19,6 @@ public class DailyBudget {
     private Long id;
     private Long kakaoId;
     private LocalDate date;
-    private int amount;
+    private int minAmount;
+    private int maxAmount;
 }
