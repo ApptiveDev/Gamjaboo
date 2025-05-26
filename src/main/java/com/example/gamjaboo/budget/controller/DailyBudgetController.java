@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -47,7 +48,16 @@ public class DailyBudgetController {
 
         return ResponseEntity.ok(new ApiResponse<>(200, "success", "일일 예산 삭제 성공", null));
     }
-    
+
+    // 일일 예산 수정
+    @PutMapping("/budget")
+    public ResponseEntity<ApiResponse<Map<String, Long>>> updateBudget(@RequestBody BudgetRequestDto dto) {
+        Long id = dailyBudgetService.updateBudget(dto);
+        Map<String, Long> response = Map.of("budgetId", id);
+
+        return ResponseEntity.ok(new ApiResponse<>(200, "success", "일일 예산 수정 성공", response));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArg(IllegalArgumentException e) {
         return ResponseEntity
