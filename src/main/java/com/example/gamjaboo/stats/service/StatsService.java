@@ -49,13 +49,24 @@ public class StatsService {
         return new DailyStatsDto(date, totalSpent, totalIncome, minAmount, maxAmount, color);
     }
 
-    // 주간 소비 통계 정보를 담은 dto 반환
+    // 주간 거래 통계 정보를 담은 dto 반환
     public PeriodStatsDto getWeeklyStats(Long kakaoId, LocalDate date) {
         LocalDate startDate = date.with(DayOfWeek.MONDAY);
         LocalDate endDate = startDate.plusDays(6);
 
         return getPeriodStatsDto(kakaoId, startDate, endDate);
     }
+    
+    
+    // 월간 거래 통계 정보를 담은 dto 반환
+   public PeriodStatsDto getMonthlyStats(Long kakaoId, LocalDate date) {
+       LocalDate startDate = date.withDayOfMonth(1);
+       LocalDate endDate = startDate.plusMonths(1).withDayOfMonth(1).minusDays(1);
+
+       return getPeriodStatsDto(kakaoId, startDate, endDate);
+   }
+
+
 
     // 기간 사이의 모든 거래 내역 조회 및 총 소득, 소비 계산해서 dto 객체 생성
     public PeriodStatsDto getPeriodStatsDto(Long kakaoId, LocalDate startDate, LocalDate endDate) {

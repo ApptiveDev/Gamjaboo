@@ -42,6 +42,18 @@ public class StatsController {
         return ResponseEntity.ok(new ApiResponse<>(200, "success", "주간 거래 통계 조회 성공", dto));
     }
 
+
+    // 월간 거래 통계 조회
+    @GetMapping("monthly/{date}")
+    public ResponseEntity<ApiResponse<PeriodStatsDto>> getMonthlyStats(
+            @RequestParam("kakaoId") Long kakaoId,
+            @PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        PeriodStatsDto dto = statsService.getMonthlyStats(kakaoId, date);
+
+        return ResponseEntity.ok(new ApiResponse<>(200, "success", "월간 거래 통계 조회 성공", dto));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArg(IllegalArgumentException e) {
         return ResponseEntity
