@@ -19,6 +19,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class KakaoService {
 
+    @Value("${kakao.redirect_uri}")
+    private String redirect_uri;
     private String clientId;
     private final String KAUTH_TOKEN_URL_HOST ;
     private final String KAUTH_USER_URL_HOST;
@@ -38,6 +40,7 @@ public class KakaoService {
                         .path("/oauth/token")
                         .queryParam("grant_type", "authorization_code")
                         .queryParam("client_id", clientId)
+                        .queryParam("redirect_uri", redirect_uri)
                         .queryParam("code", code)
                         .build(true))
                 .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())

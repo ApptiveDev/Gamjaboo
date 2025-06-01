@@ -1,3 +1,7 @@
 kakao:
   client_id: c448c956727f507ee9d1345595fcb276
   redirect_uri: http://localhost:8080/callback
+
+jwt:
+  secret: YWFkZldxYlZxdFJGVUxhbGZtbkFzZzJQRE5jZ0V6RUE=
+  expiration: 3600000
