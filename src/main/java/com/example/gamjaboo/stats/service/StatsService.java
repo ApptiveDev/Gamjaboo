@@ -3,12 +3,15 @@ package com.example.gamjaboo.stats.service;
 import com.example.gamjaboo.budget.entity.DailyBudget;
 import com.example.gamjaboo.budget.repository.DailyBudgetRepository;
 import com.example.gamjaboo.stats.dto.DailyStatsDto;
+import com.example.gamjaboo.stats.dto.PeriodStatsDto;
 import com.example.gamjaboo.transaction.TransactionType;
+import com.example.gamjaboo.transaction.dto.TransactionResponseDto;
 import com.example.gamjaboo.transaction.entity.Transaction;
 import com.example.gamjaboo.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,6 +22,7 @@ public class StatsService {
     private final TransactionRepository transactionRepository;
     private final DailyBudgetRepository budgetRepository;
 
+    // 예산 정보, 총 소득 및 소비, 예산과 총 소비에 따른 색깔을 담은 dto 객체 생성해서 반환
     public DailyStatsDto getDailyStats(Long kakaoId, LocalDate date) {
         List<Transaction> txs = transactionRepository.findAllByKakaoIdAndDate(kakaoId, date);
 
@@ -44,4 +48,43 @@ public class StatsService {
 
         return new DailyStatsDto(date, totalSpent, totalIncome, minAmount, maxAmount, color);
     }
+
+    // 주간 소비 통계 정보를 담은 dto 반환
+    public PeriodStatsDto getWeeklyStats(Long kakaoId, LocalDate date) {
+        LocalDate startDate = date.with(DayOfWeek.MONDAY);
+        LocalDate endDate = startDate.plusDays(6);
+
+        return getPeriodStatsDto(kakaoId, startDate, endDate);
+    }
+
+    // 기간 사이의 모든 거래 내역 조회 및 총 소득, 소비 계산해서 dto 객체 생성
+    public PeriodStatsDto getPeriodStatsDto(Long kakaoId, LocalDate startDate, LocalDate endDate) {
+        List<Transaction> txs = transactionRepository.findAllByKakaoIdAndDateBetween(kakaoId, startDate, endDate);
+
+        int totalSpent = txs.stream()
+                .filter(tx -> tx.getTransactionType() == TransactionType.E)
+                .mapToInt(Transaction::getAmount)
+                .sum();
+
+        int totalIncome = txs.stream()
+                .filter(tx -> tx.getTransactionType() == TransactionType.I)
+                .mapToInt(Transaction::getAmount)
+                .sum();
+
+        List<TransactionResponseDto> dtos = txs.stream()
+                .map(tx -> new TransactionResponseDto(
+                        tx.getTransactionId(),
+                        tx.getKakaoId(),
+                        tx.getCategoryId(),
+                        tx.getAmount(),
+                        tx.getTransactionType().name(),
+                        tx.getDate(),
+                        tx.getIsFixed(),
+                        tx.getMemo()
+                ))
+                .toList();
+
+        return new PeriodStatsDto(startDate, endDate, totalSpent, totalIncome, dtos);
+    }
+
 }

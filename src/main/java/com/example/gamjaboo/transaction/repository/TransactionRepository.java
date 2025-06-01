@@ -11,4 +11,5 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     Optional<Transaction> findByKakaoIdAndDate(Long kakaoId, LocalDate date);
     List<Transaction> findAllByKakaoIdAndDate(Long kakaoId, LocalDate date);
+    List<Transaction> findAllByKakaoIdAndDateBetween(Long kakaoId, LocalDate startDate, LocalDate endDate);
 }
