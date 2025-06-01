@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
 
-    public void record(TransactionRequestDto dto) {
+    public Integer record(TransactionRequestDto dto) {
         Transaction transaction = Transaction.builder()
                 .kakaoId(dto.getKakaoId())
                 .categoryId(dto.getCategoryId())
@@ -27,7 +28,9 @@ public class TransactionService {
                 .memo(dto.getMemo())
                 .build();
 
-        transactionRepository.save(transaction);
+        Transaction saved = transactionRepository.save(transaction);
+
+        return saved.getTransactionId();
     }
 
     public List<TransactionResponseDto> getAllByKakaoIdAndDate(Long kakaoId, LocalDate date) {
@@ -49,6 +52,16 @@ public class TransactionService {
                         tx.getMemo()
                 ))
                 .toList();
+    }
+
+    public void removeTransaction(Long id) {
+        Optional<Transaction> transaction = transactionRepository.findById(id);
+
+        if (transaction.isEmpty()) {
+            throw new IllegalArgumentException("해당 거래 목록이 없습니다.");
+        }
+
+        transactionRepository.deleteById(id);
     }
 }
 
