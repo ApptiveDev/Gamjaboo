@@ -1,6 +1,7 @@
 package com.example.gamjaboo.transaction.entity;
 
 import com.example.gamjaboo.transaction.TransactionType;
+import com.example.gamjaboo.transaction.dto.TransactionRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,4 +37,13 @@ public class Transaction {
 
     @Column(columnDefinition = "TEXT")
     private String memo;
+
+    public void updateFrom(TransactionRequestDto dto) {
+        this.categoryId = dto.getCategoryId();
+        this.amount = dto.getAmount();
+        this.transactionType = dto.getTransactionType();
+        this.date = dto.getDate();
+        this.isFixed = dto.getIsFixed();
+        this.memo = dto.getMemo();
+    }
 }
