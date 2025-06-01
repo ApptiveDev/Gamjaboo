@@ -1,6 +1,7 @@
 package com.example.gamjaboo.transaction.controller;
 
 import com.example.gamjaboo.common.ApiResponse;
+import com.example.gamjaboo.stats.dto.DailyStatsDto;
 import com.example.gamjaboo.transaction.dto.TransactionRequestDto;
 import com.example.gamjaboo.transaction.dto.TransactionResponseDto;
 import com.example.gamjaboo.transaction.service.TransactionService;
@@ -60,6 +61,7 @@ public class TransactionController {
 
         return ResponseEntity.ok(new ApiResponse<>(200, "success", "거래 내역 수정 성공", response));
     }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArg(IllegalArgumentException e) {

@@ -16,10 +16,10 @@ public class DailyBudgetService {
             throw new IllegalArgumentException("이미 등록된 예산입니다.");
         }
         DailyBudget budget = DailyBudget.builder()
-                .id(null)
                 .kakaoId(dto.getKakaoId())
                 .date(dto.getDate())
-                .amount(dto.getAmount())
+                .minAmount(dto.getMinAmount())
+                .maxAmount(dto.getMaxAmount())
                 .build();
 
         budgetRepository.save(budget);
