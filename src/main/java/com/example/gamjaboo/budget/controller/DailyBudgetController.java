@@ -17,6 +17,7 @@ import java.time.LocalDate;
 public class DailyBudgetController {
     private final DailyBudgetService dailyBudgetService;
 
+    // 일일 예산 등록
     @PostMapping("/budget")
     public ResponseEntity<ApiResponse<Void>> registerBudget(@RequestBody BudgetRequestDto dto) {
         dailyBudgetService.register(dto);
@@ -25,6 +26,7 @@ public class DailyBudgetController {
         return ResponseEntity.status(201).body(response);
     }
 
+    // 일일 예산 조회
     @GetMapping("/budget/{date}")
     public ResponseEntity<ApiResponse<BudgetResponseDto>> getBudget(
             @RequestParam("kakaoId") Long kakaoId,
@@ -35,6 +37,17 @@ public class DailyBudgetController {
         return ResponseEntity.ok(new ApiResponse<>(200, "success", "일일 예산 조회 성공", dto));
     }
 
+    // 일일 예산 삭제
+    @DeleteMapping("/budget/{date}")
+    public ResponseEntity<ApiResponse<Void>> deleteBudget(
+            @RequestParam("kakaoId") Long kakaoId,
+            @PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        dailyBudgetService.deleteBudget(kakaoId, date);
+
+        return ResponseEntity.ok(new ApiResponse<>(200, "success", "일일 예산 삭제 성공", null));
+    }
+    
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArg(IllegalArgumentException e) {
         return ResponseEntity
