@@ -83,10 +83,10 @@ ex) [Backend] 프로필 화면에서 로그인 불가하던 문제 해결     (�
 ### 💻 Backend
 
  ## 🧑‍💻 팀원
-| <img width="100" src="https://github.com/cotidie.png"> | <img width="100" src="https://github.com/github.png"> | 
-|:----------------------:|:----------------------:|
-| [장원석](https://github.com/cotidie) | [팀원](https://github.com/cotidie) |
-| 💻 Android | 💻 역할 |
-| 15기 | 기수 |
+| <img width="100" src="https://github.com/sul1074.png"> | <img width="100" src="https://github.com/junyi04.png"> | <img width="100" src="https://github.com/naminjuda.png"> | <img width="100" src="https://github.com/byunggil723.png"> |
+|:----------------------:|:----------------------:|:----------------------:|:----------------------:|
+| [설종환](https://github.com/sul1074) | [이병길](https://github.com/byunggil723) | [강준이](https://github.com/junyi04) | [김민주](https://github.com/naminjuda) |
+| 💻 Backend | 💻 Android | 💻 Android | 💻 Backend |
+| 21기 | 21기 | 21기 | 21기 |
 
  
