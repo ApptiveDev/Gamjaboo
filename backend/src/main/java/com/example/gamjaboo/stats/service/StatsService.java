@@ -5,11 +5,13 @@ import com.example.gamjaboo.budget.repository.DailyBudgetRepository;
 import com.example.gamjaboo.stats.dto.DailyStatsDto;
 import com.example.gamjaboo.stats.dto.PeriodStatsDto;
 import com.example.gamjaboo.transaction.TransactionType;
+import com.example.gamjaboo.transaction.category.CategoryRepository;
 import com.example.gamjaboo.transaction.dto.TransactionResponseDto;
 import com.example.gamjaboo.transaction.entity.Transaction;
 import com.example.gamjaboo.transaction.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,10 +19,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StatsService {
 
     private final TransactionRepository transactionRepository;
     private final DailyBudgetRepository budgetRepository;
+    private final CategoryRepository categoryRepository;
 
     // 예산 정보, 총 소득 및 소비, 예산과 총 소비에 따른 색깔을 담은 dto 객체 생성해서 반환
     public DailyStatsDto getDailyStats(Long kakaoId, LocalDate date) {
@@ -84,14 +88,15 @@ public class StatsService {
 
         List<TransactionResponseDto> dtos = txs.stream()
                 .map(tx -> new TransactionResponseDto(
-                        tx.getTransactionId(),
-                        tx.getKakaoId(),
-                        tx.getCategoryId(),
-                        tx.getAmount(),
-                        tx.getTransactionType().name(),
-                        tx.getDate(),
-                        tx.getIsFixed(),
-                        tx.getMemo()
+                            tx.getTransactionId(),
+                            tx.getKakaoId(),
+                            tx.getCategory().getCategoryName(),
+                            tx.getAmount(),
+                            tx.getTransactionType().name(),
+                            tx.getBackground(),
+                            tx.getDate(),
+                            tx.getIsFixed(),
+                            tx.getMemo()
                 ))
                 .toList();
 

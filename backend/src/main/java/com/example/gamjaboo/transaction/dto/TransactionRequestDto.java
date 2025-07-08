@@ -4,6 +4,7 @@ import com.example.gamjaboo.transaction.TransactionType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,14 @@ public class TransactionRequestDto {
 
     private Long kakaoId;
 
-    private Integer categoryId;
+    private String categoryName;
 
     private Integer amount;
 
     private TransactionType transactionType;
+
+    @Size(max = 10)
+    private String background;
 
     private LocalDate date;
 
