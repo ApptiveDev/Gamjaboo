@@ -1,5 +1,7 @@
 package com.example.gamjaboo.transaction.service;
 
+import com.example.gamjaboo.transaction.category.Category;
+import com.example.gamjaboo.transaction.category.CategoryRepository;
 import com.example.gamjaboo.transaction.dto.TransactionRequestDto;
 import com.example.gamjaboo.transaction.dto.TransactionResponseDto;
 import com.example.gamjaboo.transaction.entity.Transaction;
@@ -16,13 +18,18 @@ import java.util.Optional;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final CategoryRepository categoryRepository;
 
     public Integer record(TransactionRequestDto dto) {
+        Category category = categoryRepository.findByCategoryName(dto.getCategoryName())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리 입니다."));
+
         Transaction transaction = Transaction.builder()
                 .kakaoId(dto.getKakaoId())
-                .categoryId(dto.getCategoryId())
+                .category(category)
                 .amount(dto.getAmount())
                 .transactionType(dto.getTransactionType())
+                .background(dto.getBackground())
                 .date(dto.getDate())
                 .isFixed(dto.getIsFixed())
                 .memo(dto.getMemo())
@@ -41,16 +48,23 @@ public class TransactionService {
         }
 
         return transactions.stream()
-                .map(tx -> new TransactionResponseDto(
-                        tx.getTransactionId(),
-                        tx.getKakaoId(),
-                        tx.getCategoryId(),
-                        tx.getAmount(),
-                        tx.getTransactionType().name(),
-                        tx.getDate(),
-                        tx.getIsFixed(),
-                        tx.getMemo()
-                ))
+                .map(tx -> {
+                    String categoryName = categoryRepository.findById(tx.getCategory().getCategoryId())
+                            .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."))
+                            .getCategoryName();
+
+                    return new TransactionResponseDto(
+                            tx.getTransactionId(),
+                            tx.getKakaoId(),
+                            categoryName,
+                            tx.getAmount(),
+                            tx.getTransactionType().name(),
+                            tx.getBackground(),
+                            tx.getDate(),
+                            tx.getIsFixed(),
+                            tx.getMemo()
+                    );
+                })
                 .toList();
     }
 
@@ -64,11 +78,26 @@ public class TransactionService {
         transactionRepository.deleteById(id);
     }
 
+    public Integer updateCategory(Long id, String newCategoryName) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 거래 내역이 존재하지 않습니다."));
+
+        Category category = categoryRepository.findByCategoryName(newCategoryName)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+
+        transaction.changeCategory(category);
+
+        return transactionRepository.save(transaction).getTransactionId();
+    }
+
     public Integer updateTransaction(Long id, TransactionRequestDto dto) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 거래 내역이 존재하지 않습니다."));
 
-        transaction.updateFrom(dto);
+        Category category = categoryRepository.findByCategoryName(dto.getCategoryName())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+
+        transaction.updateFrom(dto, category);
 
         Transaction saved = transactionRepository.save(transaction);
 

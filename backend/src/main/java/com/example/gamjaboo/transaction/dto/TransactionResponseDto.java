@@ -1,5 +1,6 @@
 package com.example.gamjaboo.transaction.dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,14 @@ public class TransactionResponseDto {
 
     private Long kakaoId;
 
-    private Integer categoryId;
+    private String categoryName;
 
     private Integer amount;
 
     private String transactionType;  // Enum → String
+
+    @Size(max = 10)
+    private String background;
 
     private LocalDate date;
 
