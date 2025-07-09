@@ -63,7 +63,6 @@ public class TransactionController {
         return ResponseEntity.ok(new ApiResponse<>(200, "success", "일일 거래 목록 조회 성공", response));
     }
 
-
     // 거래 내역 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> removeTransaction(@PathVariable("id") Long id) {
@@ -72,6 +71,13 @@ public class TransactionController {
         return ResponseEntity.ok(new ApiResponse<>(200, "success", "거래 내역 삭제 성공", null));
     }
 
+    // 카테고리 수정
+    @PatchMapping("/{id}/{newCategoryName}")
+    public ResponseEntity<ApiResponse<Map<String, Integer>>> changeCategory(@PathVariable("id") Long id, @PathVariable("newCategoryName") String newCategoryName) {
+        Map<String, Integer> response = Map.of("transactionId", transactionService.updateCategory(id, newCategoryName));
+
+        return ResponseEntity.ok(new ApiResponse<>(200, "success", "카테고리 수정 성공", response));
+    }
 
     // 거래 내역 수정
     @PutMapping("/{id}")

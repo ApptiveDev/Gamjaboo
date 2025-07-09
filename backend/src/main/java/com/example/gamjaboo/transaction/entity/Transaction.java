@@ -44,6 +44,10 @@ public class Transaction {
     @Column(columnDefinition = "TEXT")
     private String memo;
 
+    public void changeCategory(Category category) {
+        this.category = category;
+    }
+
     public void updateFrom(TransactionRequestDto dto, Category category) {
         this.category = category;
         this.amount = dto.getAmount();

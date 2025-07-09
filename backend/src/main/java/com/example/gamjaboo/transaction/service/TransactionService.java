@@ -78,6 +78,18 @@ public class TransactionService {
         transactionRepository.deleteById(id);
     }
 
+    public Integer updateCategory(Long id, String newCategoryName) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 거래 내역이 존재하지 않습니다."));
+
+        Category category = categoryRepository.findByCategoryName(newCategoryName)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
+
+        transaction.changeCategory(category);
+
+        return transactionRepository.save(transaction).getTransactionId();
+    }
+
     public Integer updateTransaction(Long id, TransactionRequestDto dto) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 거래 내역이 존재하지 않습니다."));
