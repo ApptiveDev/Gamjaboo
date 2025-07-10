@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DailyStatsDto {
     private LocalDate date;
-    private int totalSpent;
-    private int totalIncome;
+    private long totalSpent;
+    private long totalIncome;
     private int minAmount;
     private int maxAmount;
     private String color; // blue, green, red

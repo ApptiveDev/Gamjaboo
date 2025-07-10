@@ -15,7 +15,15 @@ public class PeriodStatsDto {
 
     private LocalDate startDate;
     private LocalDate endDate;
-    private int totalSpent;
-    private int totalIncome;
+    private long totalSpent;
+    private long totalIncome;
+
+//    private long trafficSpent;  // 교통
+//    private long foodSpent;     // 식비
+//    private long leisureSpent;  // 여가
+//    private long livingSpent;   // 생활
+//    private long etcSpent;      // 기타
+//    private long fixedSpent;    // 고정
+
     private List<TransactionResponseDto> transactions;
 }
