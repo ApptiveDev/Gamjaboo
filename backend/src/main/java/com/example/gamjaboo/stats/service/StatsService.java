@@ -5,7 +5,6 @@ import com.example.gamjaboo.budget.repository.DailyBudgetRepository;
 import com.example.gamjaboo.stats.dto.DailyStatsDto;
 import com.example.gamjaboo.stats.dto.PeriodStatsDto;
 import com.example.gamjaboo.transaction.TransactionType;
-import com.example.gamjaboo.transaction.category.CategoryRepository;
 import com.example.gamjaboo.transaction.dto.TransactionResponseDto;
 import com.example.gamjaboo.transaction.entity.Transaction;
 import com.example.gamjaboo.transaction.repository.TransactionRepository;
@@ -24,20 +23,19 @@ public class StatsService {
 
     private final TransactionRepository transactionRepository;
     private final DailyBudgetRepository budgetRepository;
-    private final CategoryRepository categoryRepository;
 
     // 예산 정보, 총 소득 및 소비, 예산과 총 소비에 따른 색깔을 담은 dto 객체 생성해서 반환
     public DailyStatsDto getDailyStats(Long kakaoId, LocalDate date) {
         List<Transaction> txs = transactionRepository.findAllByKakaoIdAndDate(kakaoId, date);
 
-        int totalSpent = txs.stream()
+        long totalSpent = txs.stream()
                 .filter(tx -> tx.getTransactionType() == TransactionType.E)
-                .mapToInt(Transaction::getAmount)
+                .mapToLong(Transaction::getAmount)
                 .sum();
 
-        int totalIncome = txs.stream()
+        long totalIncome = txs.stream()
                 .filter(tx -> tx.getTransactionType() == TransactionType.I)
-                .mapToInt(Transaction::getAmount)
+                .mapToLong(Transaction::getAmount)
                 .sum();
 
         DailyBudget budget = budgetRepository.findByKakaoIdAndDate(kakaoId, date)
@@ -60,8 +58,7 @@ public class StatsService {
 
         return getPeriodStatsDto(kakaoId, startDate, endDate);
     }
-    
-    
+
     // 월간 거래 통계 정보를 담은 dto 반환
    public PeriodStatsDto getMonthlyStats(Long kakaoId, LocalDate date) {
        LocalDate startDate = date.withDayOfMonth(1);
@@ -70,23 +67,50 @@ public class StatsService {
        return getPeriodStatsDto(kakaoId, startDate, endDate);
    }
 
-
-
     // 기간 사이의 모든 거래 내역 조회 및 총 소득, 소비 계산해서 dto 객체 생성
     public PeriodStatsDto getPeriodStatsDto(Long kakaoId, LocalDate startDate, LocalDate endDate) {
         List<Transaction> txs = transactionRepository.findAllByKakaoIdAndDateBetween(kakaoId, startDate, endDate);
 
-        int totalSpent = txs.stream()
-                .filter(tx -> tx.getTransactionType() == TransactionType.E)
-                .mapToInt(Transaction::getAmount)
-                .sum();
+        long totalSpent = 0L;
+        long totalIncome = 0L;
+//        long trafficSpent = 0L;
+//        long foodSpent = 0L;
+//        long leisureSpent = 0L;
+//        long livingSpent = 0L;
+//        long etcSpent = 0L;
+//        long fixedSpent = 0L;
 
-        int totalIncome = txs.stream()
-                .filter(tx -> tx.getTransactionType() == TransactionType.I)
-                .mapToInt(Transaction::getAmount)
-                .sum();
+        for (Transaction tx : txs) {
+            // 전체 지출 계산
+            if (tx.getTransactionType() == TransactionType.E) {
+                totalSpent += tx.getAmount();
 
+//                // 카테고리별 지출 계산
+//                switch (tx.getCategory().getCategoryName()) {
+//                    case "교통" -> trafficSpent += tx.getAmount();
+//                    case "식비" -> foodSpent += tx.getAmount();
+//                    case "여가" -> leisureSpent += tx.getAmount();
+//                    case "생활" -> livingSpent += tx.getAmount();
+//                    case "기타" -> etcSpent += tx.getAmount();
+//                    case "고정" -> fixedSpent += tx.getAmount();
+//                }
+            }
+            // 전체 소득 계산
+            else if (tx.getTransactionType() == TransactionType.I) {
+                totalIncome += tx.getAmount();
+            }
+        }
+
+        List<TransactionResponseDto> dtos = getTransactionsByPeriodAsc(txs);
+
+        return new PeriodStatsDto(startDate, endDate, totalSpent, totalIncome, dtos);
+//        return new PeriodStatsDto(startDate, endDate, totalSpent, totalIncome,
+//                trafficSpent, foodSpent, leisureSpent, livingSpent, etcSpent, fixedSpent, dtos);
+    }
+
+    private List<TransactionResponseDto> getTransactionsByPeriodAsc(List<Transaction> txs) {
         List<TransactionResponseDto> dtos = txs.stream()
+                .sorted((tx1, tx2) -> tx1.getDate().compareTo(tx2.getDate()))
                 .map(tx -> new TransactionResponseDto(
                             tx.getTransactionId(),
                             tx.getKakaoId(),
@@ -100,7 +124,6 @@ public class StatsService {
                 ))
                 .toList();
 
-        return new PeriodStatsDto(startDate, endDate, totalSpent, totalIncome, dtos);
+        return dtos;
     }
-
 }
